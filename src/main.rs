@@ -4,8 +4,8 @@
 #![test_runner(standalone_binary::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
-use standalone_binary::println;
 use core::panic::PanicInfo;
+use standalone_binary::println;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
@@ -15,6 +15,8 @@ pub extern "C" fn _start() -> ! {
 
     #[cfg(test)]
     test_main();
+
+    stack();
 
     println!("It did not crash!");
     loop {}
