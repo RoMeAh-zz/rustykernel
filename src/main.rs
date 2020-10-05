@@ -16,10 +16,7 @@ pub extern "C" fn _start() -> ! {
     #[cfg(test)]
     test_main();
 
-    stack();
-
-    println!("It did not crash!");
-    loop {}
+    standalone_binary::hlt_loop();
 }
 
 #[cfg(not(test))]
