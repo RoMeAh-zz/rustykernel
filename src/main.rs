@@ -12,6 +12,8 @@ use standalone_binary::println;
 use alloc::{boxed::Box, vec, vec::Vec, rc::Rc};
 use standalone_binary::memory::BootInfoFrameAllocator;
 use x86_64::VirtAddr;
+use standalone_binary::task::Task;
+use standalone_binary::task::executor::Executor;
 
 entry_point!(kernel_main);
 
@@ -49,8 +51,10 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     #[cfg(test)]
     test_main();
 
-    println!("It did not crash!");
-    standalone_binary::hlt_loop();
+    let mut executor = Executor::new();
+    executor.spawn(Task::new(example_task()));
+    executor.spawn(Task::new(standalone_binary::task::keyboard::print_keypresses()));
+    executor.run();
 }
 
 #[cfg(not(test))]
@@ -69,4 +73,13 @@ fn panic(info: &PanicInfo) -> ! {
 #[test_case]
 fn trivial_assertion() {
     assert_eq!(1, 1);
+}
+
+async fn async_number() -> u32 {
+    69
+}
+
+async fn example_task() {
+    let number = async_number().await;
+    println!("async number: {}", number);
 }

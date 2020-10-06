@@ -7,6 +7,7 @@
 #![feature(alloc_error_handler)]
 #![feature(const_mut_refs)]
 #![feature(const_in_array_repeat_expressions)]
+#![feature(wake_trait)]
 
 use core::panic::PanicInfo;
 extern crate alloc;
@@ -17,6 +18,7 @@ pub mod memory;
 pub mod serial;
 pub mod vga_buffer;
 pub mod allocator;
+pub mod task;
 
 pub fn init() {
     gdt::init();
